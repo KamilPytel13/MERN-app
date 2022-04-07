@@ -1,0 +1,16 @@
+.main-navigation__weather {
+    font-weight: normal;
+  }
+
+.main-navigation__weather div {
+    display: flex;
+}
+
+  .main-navigation__weather p {
+    margin: 0;
+    color: black;
+  }
+
+  .main-navigation__weather img {
+      margin-left: 10px;
+}
