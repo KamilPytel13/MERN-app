@@ -1,6 +1,6 @@
-.main-info {
+.main-features {
     list-style: none;
-    margin: 0 auto;
+    margin: 3rem auto 0;
     padding: 0;
     width: 90%;
     max-width: 50rem;
@@ -11,6 +11,6 @@
     align-items: center;
   }
 
-  .main-info h1, h3 {
+  .features h1 {
       text-align: center;
   }

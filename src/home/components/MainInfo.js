@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Button from '../../shared/components/FormElements/Button';
 import './MainInfo.css';
 
-const MainInfo = props => {
+const MainInfo = () => {
     return (
         <div className='main-info'>
             <h1>Log in or sign up to the community</h1>
