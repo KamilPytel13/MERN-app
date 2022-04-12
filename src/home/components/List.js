@@ -1,6 +1,10 @@
 import FeatureItem from "./FeatureItem";
 
 const List = props => {
+    if(props.items.length === 0) {
+        return <h2>No features to display</h2>
+    }
+
     return (
         <ul className="boxes">
             {props.items.map(item => {

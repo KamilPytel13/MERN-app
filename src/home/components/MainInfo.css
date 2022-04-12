@@ -9,6 +9,7 @@
     flex-wrap: wrap;
     flex-direction: column;
     align-items: center;
+    margin-top: 5rem;
   }
 
   .main-info h1, h3 {

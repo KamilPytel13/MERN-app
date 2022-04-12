@@ -1,0 +1,33 @@
+.home {
+    list-style: none;
+    margin: 0 auto;
+    padding: 0;
+    width: 90%;
+    max-width: 50rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .boxes {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0 3rem;
+    flex-wrap: wrap;
+  }
+
+  @media (min-width: 768px) {
+    .boxes {
+      justify-content: space-evenly;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .boxes {
+      flex-direction: column;
+    }
+
+  }

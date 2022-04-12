@@ -12,7 +12,7 @@ const MainInfo = () => {
                 You can check upcoming maintenance schedule or plan other events!
             </h3>
             <Link to='/register-page'>
-                <Button >REGISTER</Button>
+                <Button>REGISTER</Button>
             </Link>
         </div>
     );

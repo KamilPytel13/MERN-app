@@ -5,14 +5,9 @@
     width: 240px;
     height: 240px;
     padding: 5px;
+    margin-bottom: 20px;
 }
 
 .box h2, p {
     text-align: center;
-}
-
-@media (max-width: 768px) {
-    .box {
-        margin-bottom: 20px;
-    }
 }
