@@ -26,6 +26,8 @@
   
   .modal__footer {
     padding: 1rem 0.5rem;
+    display: flex;
+    justify-content: space-around;
   }
   
   @media (min-width: 768px) {
@@ -56,3 +58,5 @@
     opacity: 0;
     transition: all 200ms;
   }
+
+  

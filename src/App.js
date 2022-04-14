@@ -6,6 +6,7 @@ import Login from './home/pages/Login';
 import Home from './home/pages/Home';
 import Events from './home/pages/Events';
 import Calendar from './home/pages/Calendar';
+import Users from './users/Users';
 
 function App() {
   return (
@@ -15,8 +16,9 @@ function App() {
           <Routes>
             <Route path='/' element={<Login />} />
             <Route path='home-page' element={<Home />} />
-            <Route path='home-page/events' element={<Events />} />
-            <Route path='home-page/calendar' element={<Calendar />} />
+            <Route path='events' exact element={<Events />} />
+            <Route path='calendar' element={<Calendar />} />
+            <Route path='users' element={<Users />} />
           </Routes>
         </main>
     </Router>

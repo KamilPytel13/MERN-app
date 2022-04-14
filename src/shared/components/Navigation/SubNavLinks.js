@@ -1,4 +1,5 @@
 import { Outlet, NavLink } from 'react-router-dom';
+import NavWeather from './NavWeather';
 
 import './SubNavLinks.css';
 
@@ -6,14 +7,20 @@ const SubNavLinks = props => {
     return (
         <>
             <ul className='subnav-links'>
-                <li>
-                    <NavLink to="">Home</NavLink>
+                <li className='weather'>
+                    <NavWeather />
                 </li>
                 <li>
-                    <NavLink to="events">Events</NavLink>
+                    <NavLink to="../home-page">Home</NavLink>
                 </li>
                 <li>
-                    <NavLink to="calendar">Calendar</NavLink>
+                    <NavLink to="../events">Events</NavLink>
+                </li>
+                <li>
+                    <NavLink to="../calendar">Calendar</NavLink>
+                </li>
+                <li>
+                    <NavLink to="../users">Users</NavLink>
                 </li>
             </ul>
 

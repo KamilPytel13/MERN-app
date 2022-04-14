@@ -76,8 +76,20 @@
     }
   }
 
+  .weather {
+    display: none;
+  }
+
   @media (max-width: 768px) {
     .subnav-links {
       flex-direction: column;
+    }
+
+    .weather {
+      display: list-item;
+    }
+
+    .weather div {
+      display: flex;
     }
   }

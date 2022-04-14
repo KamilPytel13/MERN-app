@@ -42,4 +42,18 @@
     .main-navigation__header-nav {
       display: block;
     }
+
+  }
+
+  @media (max-width: 768px) {
+    .main-navigation__weather {
+      display: none;
+    }
+
+    .main-header {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
   }

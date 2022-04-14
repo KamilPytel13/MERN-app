@@ -1,4 +1,5 @@
 import { Outlet, NavLink } from 'react-router-dom';
+import NavWeather from './NavWeather';
 import './NavLinks.css';
 
 const NavLinks = props => {
