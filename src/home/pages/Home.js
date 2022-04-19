@@ -3,6 +3,9 @@ import { useState } from 'react';
 import SubMainNavigation from '../../shared/components/Navigation/SubMainNavigation';
 import Button from '../../shared/components/FormElements/Button';
 import Modal from '../../shared/components/UIElements/Modal';
+import Input from '../../shared/components/FormElements/Input';
+import { useForm } from '../../shared/hooks/form-hook';
+import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from '../../shared/util/validators';
 
 import './Home.css'
 import '../components/CreatePostForm.css';
@@ -11,12 +14,26 @@ import React from 'react';
 const Home = props => {
     const [newPost, setNewPost] = useState(false);
 
+    const [formState, inputHandler] = useForm(
+        {
+            title: {
+                value: '',
+                isValid: false
+            },
+            description: {
+                value: '',
+                isValid: false
+            }
+        },
+        false
+    );
+
     const openNewPostHandler = () => setNewPost(true);
     const closeNewPostHandler = () => setNewPost(false);
 
     const confirmPostHandler = () => {
         setNewPost(false);
-        console.log('posting');
+        console.log(formState.inputs); //send this to backend later
     }
 
     return (
@@ -28,16 +45,35 @@ const Home = props => {
           footer={
             <React.Fragment>
               <Button onClick={closeNewPostHandler}>CANCEL</Button>
-              <Button onClick={confirmPostHandler}>POST</Button>
+              <Button
+                type="submit"
+                onClick={confirmPostHandler}
+                disabled={!formState.isValid}
+              >
+                POST
+              </Button>
             </React.Fragment>
           }
         >
-          {/* Props.children z Modal */}
+          {/* Props.children from Modal */}
           <div className="form-styles">
-            <h3>Title</h3>
-            <input id="title"></input>
-            <h3>Description</h3>
-            <textarea id="description" rows="3"></textarea>
+            <Input
+              id="title"
+              element="input"
+              type="text"
+              label="Title"
+              validators={[VALIDATOR_REQUIRE()]}
+              errorText="Please enter a valid title."
+              onInput={inputHandler}
+            />
+            <Input
+              id="description"
+              element="textarea"
+              label="Description"
+              validators={[VALIDATOR_MINLENGTH(5)]}
+              errorText="Please enter a valid description (at least 5 characters)."
+              onInput={inputHandler}
+            />
           </div>
         </Modal>
 
