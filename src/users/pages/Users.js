@@ -1,5 +1,5 @@
-import SubMainNavigation from '../shared/components/Navigation/SubMainNavigation';
-import UserList from './components/UserList';
+import SubMainNavigation from '../../shared/components/Navigation/SubMainNavigation';
+import UserList from '../components/UserList';
 
 const Users = props => {
     const USERS = [
