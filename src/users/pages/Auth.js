@@ -1,11 +1,15 @@
+import { useContext } from 'react'
+
 import Card from '../../shared/components/UIElements/Card';
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH} from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
+import { AuthContext } from '../../shared/context/authContext';
 import './Auth.css';
 
 const Auth = () => {
+    const auth = useContext(AuthContext);
     const [formState, inputHandler] = useForm({
         email: {
             value: '',
@@ -20,6 +24,7 @@ const Auth = () => {
     const authHandler = event => {
         event.preventDefault();
         console.log(formState.inputs);
+        auth.login();
     }
 
     return (
@@ -46,7 +51,7 @@ const Auth = () => {
                 errorText='Please enter a valid password.' 
                 onInput={inputHandler}
                 />
-                <Button type='submit' disabled={!formState.isValid}>Sign In</Button>
+                <Button type='submit' disabled={!formState.isValid}>SIGN IN</Button>
             </form>
         </Card>
     );
