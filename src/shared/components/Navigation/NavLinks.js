@@ -11,11 +11,11 @@ const NavLinks = props => {
     return (
       <>
         <ul className="nav-links">
-          {auth.isLoggedIn && (
+          {/* {auth.isLoggedIn && (
             <li>
               <NavLink to="home-page">HOME</NavLink>
             </li>
-          )}
+          )} */}
           {!auth.isLoggedIn && (
             <li>
               <NavLink to="login-page">LOGIN</NavLink>
