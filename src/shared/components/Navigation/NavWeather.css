@@ -6,11 +6,11 @@
     display: flex;
 }
 
-  .main-navigation__weather p {
+.main-navigation__weather p {
     margin: 0;
-    color: black;
+    color: #f2f2f2;
   }
 
-  .main-navigation__weather img {
-      margin-left: 10px;
+.main-navigation__weather img {
+    margin-left: 10px;
 }
