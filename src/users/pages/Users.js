@@ -5,8 +5,8 @@ const Users = props => {
     const USERS = [
         {
             id: 1,
-            name: 'Kami',
-            surname: 'Pyc'
+            name: 'User',
+            surname: '1'
         }
     ];
 
