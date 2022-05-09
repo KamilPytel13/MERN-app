@@ -1,6 +1,8 @@
+const { v4: uuidv4 } = require('uuid');
+
 const HttpError = require('../models/http-errors');
 
-const DUMMY_POSTS = [
+let DUMMY_POSTS = [
     {
         id: 'p1',
         title: 'Test Title',
@@ -29,4 +31,59 @@ const getAllPosts = (req, res, next) => {
     res.json({DUMMY_POSTS});
 };
 
+const getPostById = (req, res, next) => {
+    const postId = req.params.pid;
+
+    const post = DUMMY_POSTS.find(p => p.id === postId);
+
+    if(!post) {
+        return next(new HttpError('There is no post with a given Id', 404));
+    }
+
+    res.json({post});
+};
+
+const createPost = (req, res, next) => {
+    const { title, description, date, time, creator, likes } = req.body;
+
+    const createdPost = {
+        id: uuidv4(),
+        title, 
+        description,
+        date,
+        time,
+        creator,
+        likes
+    };
+
+    DUMMY_POSTS.push(createdPost);
+    res.status(201).json(createdPost);
+};
+
+const editPost = (req, res, next) => {
+    const { title, description } = req.body;
+    const postId = req.params.pid;
+
+    const updatedPost = { ...DUMMY_POSTS.find(p => p.id === postId) };
+    const postIndex = DUMMY_POSTS.findIndex(p => p.id === postId);
+
+    updatedPost.title = title;
+    updatedPost.description = description;
+
+    DUMMY_POSTS[postIndex] = updatedPost;
+
+    res.status(200).json({ post: updatedPost });
+};
+
+const deletePost = (req, res, next) => {
+    const postId = req.params.pid;
+    DUMMY_POSTS = DUMMY_POSTS.filter(p => p.id !== postId);
+
+    res.status(200).json({ message: 'Post deleted' });
+};
+
 exports.getAllPosts = getAllPosts;
+exports.getPostById = getPostById;
+exports.createPost = createPost;
+exports.editPost = editPost;
+exports.deletePost = deletePost;

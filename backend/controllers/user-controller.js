@@ -1,6 +1,6 @@
 const HttpError = require('../models/http-errors');
 
-const DUMMY_USER = [
+let DUMMY_USER = [
     {
         id: 'u1',
         name: 'Jelen',
