@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
+const { validationResult } = require('express-validator');
 
 const HttpError = require('../models/http-errors');
 
@@ -44,6 +45,12 @@ const getPostById = (req, res, next) => {
 };
 
 const createPost = (req, res, next) => {
+    const errors = validationResult(req);
+
+    if(!errors.isEmpty()){
+        throw new HttpError('Invalid inputs', 422);
+    }
+
     const { title, description, date, time, creator, likes } = req.body;
 
     const createdPost = {
