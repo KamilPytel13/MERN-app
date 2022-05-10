@@ -73,6 +73,12 @@ const createEvent = (req, res, next) => {
 };
 
 const editEvent = (req, res, next) => {
+    const errors = validationResult(req);
+
+    if(!errors.isEmpty()){
+        throw new HttpError('Invalid inputs', 422);
+    };
+    
     const { title, description, place, eventDate, eventTime} = req.body;
     const eventId = req.params.eid;
 
@@ -92,6 +98,11 @@ const editEvent = (req, res, next) => {
 
 const deleteEvent = (req, res, next) => {
     const eventId = req.params.eid;
+
+    if(!DUMMY_EVENTS.find(e => e.id === eventId)){
+        throw new HttpError('The event has already been deleted', 404);
+    }
+    
     DUMMY_EVENTS = DUMMY_EVENTS.filter(e => e.id !== eventId);
 
     res.status(200).json({ message: 'Event deleted'} );

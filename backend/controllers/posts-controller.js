@@ -84,6 +84,11 @@ const editPost = (req, res, next) => {
 
 const deletePost = (req, res, next) => {
     const postId = req.params.pid;
+    
+    if(!DUMMY_POSTS.find(p => p.id === postId)){
+        throw new HttpError('The post with a given id already does not exist', 404);
+    }
+
     DUMMY_POSTS = DUMMY_POSTS.filter(p => p.id !== postId);
 
     res.status(200).json({ message: 'Post deleted' });

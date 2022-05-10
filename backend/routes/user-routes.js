@@ -11,7 +11,7 @@ router.post('/register',
     [
         check('name').not().isEmpty(),
         check('surname').not().isEmpty(),
-        check('email').isEmail(),
+        check('email').normalizeEmail().isEmail(),
         check('password').not().isEmpty(),
         check('apartment').isFloat({ min: 1, max: 999})
     ], 
