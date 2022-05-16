@@ -2,6 +2,7 @@ const { v4: uuidv4 } = require('uuid');
 const { validationResult } = require('express-validator');
 
 const HttpError = require('../models/http-errors');
+const Event = require('../models/events-model');
 
 let DUMMY_EVENTS = [
     {
@@ -47,28 +48,35 @@ const getEventById = (req, res, next) => {
     res.json({event});
 }
 
-const createEvent = (req, res, next) => {
+const createEvent = async(req, res, next) => {
     const errors = validationResult(req);
 
     if(!errors.isEmpty()){
         throw new HttpError('Invalid inputs', 422);
     };
 
-    const { title, description, place, postDate, eventDate, postTime, eventTime, creator} = req.body;
+    const { title, description, eventDate, eventTime, place, creator} = req.body;
 
-    const createdEvent = {
-        id: uuidv4(),
+    const createdEvent = new Event({
         title,
         description,
         place,
-        postDate,
         eventDate,
-        postTime,
         eventTime,
         creator
-    }
+    });
     
-    DUMMY_EVENTS.push(createdEvent);
+    //DUMMY_EVENTS.push(createdEvent);
+    try {
+        await createdEvent.save()
+    } catch(err) {
+        const error = new HttpError(
+            'Could not create a new event. Try again',
+            500
+        );
+        return next(error);
+    };
+
     res.status(201).json(createdEvent);
 };
 
@@ -78,7 +86,7 @@ const editEvent = (req, res, next) => {
     if(!errors.isEmpty()){
         throw new HttpError('Invalid inputs', 422);
     };
-    
+
     const { title, description, place, eventDate, eventTime} = req.body;
     const eventId = req.params.eid;
 

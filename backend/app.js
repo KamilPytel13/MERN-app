@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const HttpError = require('./models/http-errors');
 const userRoutes = require('./routes/user-routes');
@@ -31,4 +32,11 @@ app.use((error, req, res, next) => {
     });
 });
 
-app.listen(5002);
+mongoose.connect('mongodb+srv://Pyciu:Mongodbpass@dissertation.qpx3y.mongodb.net/communityApp?retryWrites=true&w=majority')
+    .then(() => {
+        app.listen(5002);
+    })
+    .catch(err => {
+        console.log(err);
+    });
+
