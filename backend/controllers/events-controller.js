@@ -29,23 +29,53 @@ let DUMMY_EVENTS = [
     }
 ];
 
-const getAllEvents = (req, res, next) => {
-    if(!DUMMY_EVENTS) {
-        throw new HttpError('There is no posts to display', 404);
+const getAllEvents = async (req, res, next) => {
+    let events;
+
+    try {
+        events = await Event.find();
+    } catch(err) {
+        const error = new HttpError(
+            'Something went wrong',
+            500
+        );
+        return next(error);
     }
 
-    res.json({DUMMY_EVENTS});
+    if(!events) {
+        const error = new HttpError(
+            'There is no posts to display',
+            404);
+        return next(error);
+    }
+
+    res.json( {events: events.map(event => event.toObject( {getters: true} ))} );
 };
 
-const getEventById = (req, res, next) => {
+const getEventById = async (req, res, next) => {
     const eventId = req.params.eid;
-    const event = DUMMY_EVENTS.find(e => e.id === eventId);
-
-    if(!event) {
-        return next(new HttpError('There is no event with a given Id', 404));
+    let event;
+    
+    try {
+        event = await Event.findById(eventId);
+    } catch(err) {
+        const error = new HttpError(
+            'Something went wrong. Could not find an event.',
+            500
+        );
+        return next(error);
     }
 
-    res.json({event});
+
+    if(!event) {
+        const error = new HttpError(
+            'There is no event with a given Id', 
+            404
+        );
+        return next(error);
+    }
+
+    res.json( {event: event.toObject( {getters: true} )} );
 }
 
 const createEvent = async(req, res, next) => {
@@ -80,38 +110,78 @@ const createEvent = async(req, res, next) => {
     res.status(201).json(createdEvent);
 };
 
-const editEvent = (req, res, next) => {
+const editEvent = async (req, res, next) => {
     const errors = validationResult(req);
 
     if(!errors.isEmpty()){
-        throw new HttpError('Invalid inputs', 422);
-    };
+        const error = new HttpError(
+            'Invalid inputs', 
+            422);
+        return next(error);
+    }
 
     const { title, description, place, eventDate, eventTime} = req.body;
     const eventId = req.params.eid;
 
-    const updatedEvent = { ...DUMMY_EVENTS.find(e => e.id === eventId) };
-    const eventIndex = DUMMY_EVENTS.findIndex(e => e.id === eventId);
+    let event;
 
-    updatedEvent.title = title;
-    updatedEvent.description = description;
-    updatedEvent.place = place;
-    updatedEvent.eventDate = eventDate;
-    updatedEvent.eventTime = eventTime;
+    try {
+        event = await Event.findById(eventId);
+    } catch(err) {
+        const error = new HttpError(
+            'Something went wrong. Could not update the event.', 
+            500);
+        return next(error);
+    }
 
-    DUMMY_EVENTS[eventIndex] = updatedEvent;
+    event.title = title;
+    event.description = description;
+    event.place = place;
+    event.eventDate = eventDate;
+    event.eventTime = eventTime;
 
-    res.status(200).json({ event: updatedEvent });
+    try {
+        await event.save();
+    } catch(err) {
+        const error = new HttpError(
+            'Something went wrong. Could not update the event.', 
+            500);
+        return next(error);
+    }
+
+    res.status(200).json({ event: event.toObject( {getters: true }) });
 };
 
-const deleteEvent = (req, res, next) => {
+const deleteEvent = async (req, res, next) => {
     const eventId = req.params.eid;
 
-    if(!DUMMY_EVENTS.find(e => e.id === eventId)){
-        throw new HttpError('The event has already been deleted', 404);
+    let event;
+
+    try {
+        event = await Event.findById(eventId);
+    } catch(err) {
+        const error = new HttpError(
+            'Something went wrong. Could not delete the event.', 
+            500);
+        return next(error);
     }
-    
-    DUMMY_EVENTS = DUMMY_EVENTS.filter(e => e.id !== eventId);
+
+    if(!event) {
+        const error = new HttpError(
+            'There is no event to delete with a given Id', 
+            404
+        );
+        return next(error);
+    }
+
+    try {
+        await event.remove();
+    } catch(err) {
+        const error = new HttpError(
+            'Something went wrong. Could not delete the event.', 
+            500);
+        return next(error);
+    }
 
     res.status(200).json({ message: 'Event deleted'} );
 };

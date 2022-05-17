@@ -12,10 +12,7 @@ router.post('/',
     [
         check('title').not().isEmpty(),
         check('description').isLength({ min: 5 }),
-        check('date').not().isEmpty(),
-        check('time').matches('^([0-2][0-9]):[0-5][0-9]$'),
         check('creator').not().isEmpty(),
-        check('likes').isNumeric()
     ],
     postsController.createPost);
 
