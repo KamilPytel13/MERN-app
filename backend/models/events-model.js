@@ -7,7 +7,7 @@ const eventSchema = new Schema({
     place: { type: String, required: true },
     eventDate: { type: Date, required: true },
     eventTime: { type: String, required: true },
-    creator: { type: String, required: true }
+    creator: { type: mongoose.Types.ObjectId, required: true, ref: 'User' }
 }, {
     timestamps: true
 });

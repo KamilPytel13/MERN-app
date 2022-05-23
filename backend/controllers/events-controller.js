@@ -1,33 +1,9 @@
-const { v4: uuidv4 } = require('uuid');
 const { validationResult } = require('express-validator');
+const mongoose = require('mongoose');
 
 const HttpError = require('../models/http-errors');
 const Event = require('../models/events-model');
-
-let DUMMY_EVENTS = [
-    {
-        id: 'e1',
-        title: 'Test Title',
-        description: 'Test description of an event',
-        place: 'Zakopane',
-        postDate: '21/04/22',
-        eventDate: '23/05/22',
-        postTime: '19:20',
-        eventTime: '10:00',
-        creator: 'u1'
-    },
-    {
-        id: 'e2',
-        title: 'Test Title 2',
-        description: 'Test description of an event 2',
-        place: 'Krakow',
-        postDate: '11/01/22',
-        eventDate: '28/06/22',
-        postTime: '12:40',
-        eventTime: '08:30',
-        creator: 'u2'
-    }
-];
+const User = require('../models/user');
 
 const getAllEvents = async (req, res, next) => {
     let events;
@@ -95,10 +71,31 @@ const createEvent = async(req, res, next) => {
         eventTime,
         creator
     });
-    
-    //DUMMY_EVENTS.push(createdEvent);
+
+    let user;
+
     try {
-        await createdEvent.save()
+        user = await User.findById(creator);
+    } catch(err) {
+        const error = new HttpError(
+            'Could not create the event. Try again',
+            500
+        );
+        return next(error);
+    }
+
+    if(!user) {
+        const error = new HttpError('Could not find a user with a given id', 404);
+        return next(error);
+    }
+
+    try {
+        const session = await mongoose.startSession();
+        session.startTransaction();
+        await createdEvent.save({ session: session });
+        user.events.push(createdEvent);
+        await user.save({ session: session });
+        await session.commitTransaction();
     } catch(err) {
         const error = new HttpError(
             'Could not create a new event. Try again',
@@ -158,7 +155,7 @@ const deleteEvent = async (req, res, next) => {
     let event;
 
     try {
-        event = await Event.findById(eventId);
+        event = await Event.findById(eventId).populate('creator');
     } catch(err) {
         const error = new HttpError(
             'Something went wrong. Could not delete the event.', 
@@ -175,7 +172,12 @@ const deleteEvent = async (req, res, next) => {
     }
 
     try {
-        await event.remove();
+        const session = await mongoose.startSession();
+        session.startTransaction();
+        await event.remove({ session: session });
+        event.creator.events.pull(event);
+        await event.creator.save({ session: session });
+        session.commitTransaction();
     } catch(err) {
         const error = new HttpError(
             'Something went wrong. Could not delete the event.', 

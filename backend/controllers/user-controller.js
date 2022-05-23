@@ -1,19 +1,6 @@
-const { v4: uuidv4 } = require('uuid');
 const { validationResult } = require('express-validator');
 const HttpError = require('../models/http-errors');
 const User = require('../models/user');
-
-let DUMMY_USERS = [
-    {
-        id: 'u1',
-        name: 'Jelen',
-        surname: 'z Lasu',
-        email: 'jelen@gmail.com',
-        apartment: 2,
-        password: 'haslo'
-        //mobile: '074653527483'
-    }
-];
 
 const getUserById = async (req, res, next) => {
     const userId = req.params.uid;
@@ -39,9 +26,9 @@ const getUserById = async (req, res, next) => {
     res.json({ user: user.toObject( {getters: true }) });
 };
 
-const getAllUsers = (req, res, next) => {
-    res.json({ users: DUMMY_USERS});
-}
+// const getAllUsers = (req, res, next) => {
+//     res.json({ users: DUMMY_USERS});
+// }
 
 const registerUser = async (req, res, next) => {
     const errors = validationResult(req);
@@ -79,7 +66,9 @@ const registerUser = async (req, res, next) => {
         surname,
         email,
         password,
-        apartment
+        apartment,
+        posts: [],
+        events: []
     });
 
     try {
@@ -122,6 +111,6 @@ const loginUser = async (req, res, next) => {
 };
 
 exports.getUserById = getUserById;
-exports.getAllUsers = getAllUsers;
+//exports.getAllUsers = getAllUsers;
 exports.registerUser = registerUser;
 exports.loginUser = loginUser;

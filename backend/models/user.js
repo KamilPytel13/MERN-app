@@ -9,7 +9,9 @@ const userSchema = new Schema({
     surname: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
-    apartment: { type: Number, required: true }
+    apartment: { type: Number, required: true },
+    posts: [{ type: mongoose.Types.ObjectId, ref: 'Post'}],
+    events: [{ type: mongoose.Types.ObjectId, ref: 'Event'}]
 });
 
 //userSchema.plugin(uniqueValidator);

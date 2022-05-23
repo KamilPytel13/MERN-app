@@ -1,29 +1,9 @@
-const { v4: uuidv4 } = require('uuid');
 const { validationResult } = require('express-validator');
+const mongoose = require('mongoose');
 
 const HttpError = require('../models/http-errors');
 const Post = require('../models/posts-model');
-
-let DUMMY_POSTS = [
-    {
-        id: 'p1',
-        title: 'Test Title',
-        description: 'Test description of a post',
-        date: '21/04/22',
-        time: '19:20',
-        creator: 'u1',
-        likes: 4
-    },
-    {
-        id: 'p2',
-        title: 'Test Title 2',
-        description: 'Test description of a post 2',
-        date: '11/01/22',
-        time: '12:40',
-        creator: 'u2',
-        likes: 0
-    }
-];
+const User = require('../models/user');
 
 const getAllPosts = async (req, res, next) => {
     let posts;
@@ -90,9 +70,32 @@ const createPost = async (req, res, next) => {
         creator
     });
 
+    let user;
+
     try {
-        await createdPost.save()
+        user = await User.findById(creator);
     } catch(err) {
+        const error = new HttpError(
+            'Could not create the post. Try again',
+            500
+        );
+        return next(error);
+    }
+
+    if(!user) {
+        const error = new HttpError('Could not find a user with a given id', 404);
+        return next(error);
+    }
+
+    try {
+        const session = await mongoose.startSession();
+        session.startTransaction();
+        await createdPost.save({ session: session });
+        user.posts.push(createdPost);
+        await user.save({ session: session });
+        await session.commitTransaction();
+    } catch(err) {
+        console.log(err)
         const error = new HttpError(
             'Could not save the post. Try again',
             500
@@ -141,7 +144,7 @@ const deletePost = async (req, res, next) => {
     let post;
 
     try {
-        post = await Post.findById(postId);
+        post = await Post.findById(postId).populate('creator');
     } catch(err) {
         const error = new HttpError(
             'Something went wront. Could not delete the post.',
@@ -159,7 +162,12 @@ const deletePost = async (req, res, next) => {
     }
 
     try {
-        await post.remove();
+        const session = await mongoose.startSession();
+        session.startTransaction();
+        await post.remove({ session: session });
+        post.creator.posts.pull(post);
+        await post.creator.save({ session: session });
+        await session.commitTransaction();
     } catch(err) {
         const error = new HttpError(
             'Something went wront. Could not delete the post.',
