@@ -3,6 +3,8 @@ import { useContext } from 'react'
 import Card from '../../shared/components/UIElements/Card';
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH} from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
 import { AuthContext } from '../../shared/context/authContext';
@@ -23,7 +25,9 @@ const Auth = () => {
 
     const authHandler = event => {
         event.preventDefault();
-        console.log(formState.inputs);
+        //console.log(formState.inputs);
+        
+
         auth.login();
     }
 
