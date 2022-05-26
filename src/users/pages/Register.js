@@ -43,7 +43,7 @@ const Register = () => {
         //console.log(formState.inputs);
         try {
             setIsLoading(true);
-            const response = await fetch('http://localhost:5002/api/user/register', {
+            const response = await fetch('http://localhost:5002/api/users/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -60,7 +60,6 @@ const Register = () => {
             if(!response.ok) {
                 throw new Error(responseData.message);
             }
-            console.log(responseData);
             setIsLoading(false);
             auth.login();
         } catch(err) {

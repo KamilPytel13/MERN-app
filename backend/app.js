@@ -21,7 +21,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/api/user', userRoutes);
+app.use('/api/users/', userRoutes);
 app.use('/api/home', postsRoutes);
 app.use('/api/events', eventsRoutes);
 
