@@ -8,12 +8,12 @@ import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE} from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
 import { AuthContext } from '../../shared/context/authContext';
+import { useHttp } from '../../shared/hooks/http-hook';
 import './Register.css';
 
 const Register = () => {
     const auth = useContext(AuthContext);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState();
+    const {isLoading, error, sendRequest, clearError} = useHttp();
 
     const [formState, inputHandler] = useForm({
         name: {
@@ -40,42 +40,29 @@ const Register = () => {
 
     const authHandler = async event => {
         event.preventDefault();
-        //console.log(formState.inputs);
+
         try {
-            setIsLoading(true);
-            const response = await fetch('http://localhost:5002/api/users/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: formState.inputs.name.value,
-                    surname: formState.inputs.surname.value,
-                    email: formState.inputs.email.value,
-                    password: formState.inputs.password.value,
-                    apartment: formState.inputs.apartment.value
-                })
+            await sendRequest('http://localhost:5002/api/users/register', 
+            'POST',
+            JSON.stringify({
+                name: formState.inputs.name.value,
+                surname: formState.inputs.surname.value,
+                email: formState.inputs.email.value,
+                password: formState.inputs.password.value,
+                apartment: formState.inputs.apartment.value
+            }),
+            {
+                'Content-Type': 'application/json'
             });
-            const responseData = await response.json();
-            if(!response.ok) {
-                throw new Error(responseData.message);
-            }
-            setIsLoading(false);
             auth.login();
         } catch(err) {
-            console.log(err);
-            setIsLoading(false);
-            setError(err.message);
-        }
-    }
 
-    const errorHandler = () => {
-        setError(null);
+        }
     }
 
     return (
         <React.Fragment>
-            <ErrorModal error={error} onClear={errorHandler} />
+            <ErrorModal error={error} onClear={clearError} />
             <Card className='register'>
                 {isLoading && <LoadingSpinner asOverlay />}
                 <h2>Register</h2>
