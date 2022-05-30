@@ -22,7 +22,7 @@ const Home = props => {
     const [newPost, setNewPost] = useState(false);
     const {isLoading, error, sendRequest, clearError} = useHttp();
 
-    // const [loadedPosts, setLoadedPosts] = useState();
+    const [loadedPosts, setLoadedPosts] = useState();
 
     const [formState, inputHandler] = useForm(
         {
@@ -62,17 +62,18 @@ const Home = props => {
         };
         //setNewPost(false);
     }
+          
 
-  //   useEffect(() => {
-  //     const getPosts = async() => {
-  //         try {
-  //             const responseData = await sendRequest('http://localhost:5002/api/home');
-  //             setLoadedPosts(responseData.posts);
-  //         } catch(err) {
-  //         }
-  //     }
-  //     getPosts();
-  // }, [sendRequest]);
+    useEffect(() => {
+      const getPosts = async() => {
+          try {
+              const responseData = await sendRequest('http://localhost:5002/api/home');
+              setLoadedPosts(responseData.posts);
+          } catch(err) {
+          }
+      }
+      getPosts();
+  }, [sendRequest]);
 
     // const postItem = () => {
     //   return (
@@ -131,7 +132,7 @@ const Home = props => {
         <SubMainNavigation />
         <Button onClick={openNewPostHandler}>New Post</Button>
         {/* {postItem()} */}
-        {/* <PostsList posts={loadedPosts}/> */}
+        <PostsList posts={loadedPosts}/>
       </React.Fragment>
     );
 }

@@ -1,5 +1,4 @@
 import PostItem from "./PostItem";
-import Card from "../../shared/components/UIElements/Card";
 import './UserList.css';
 
 const PostsList = props => {
@@ -16,7 +15,7 @@ const PostsList = props => {
     return (
         //<h2>hello</h2>
         <ul className="users-list">
-            {props.posts.map(post => {
+            {props.posts?.map(post => {
                 return <PostItem 
                 key={post.id}
                 id={post.id}
