@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import SubMainNavigation from '../../shared/components/Navigation/SubMainNavigation';
@@ -12,6 +12,7 @@ import { useForm } from '../../shared/hooks/form-hook';
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from '../../shared/util/validators';
 import { AuthContext } from '../../shared/context/authContext';
 import { useHttp } from '../../shared/hooks/http-hook';
+import EventsList from '../../users/components/EventsList';
 
 import './Events.css'
 import '../components/CreatePostForm.css';
@@ -20,6 +21,8 @@ const Events = props => {
     const auth = useContext(AuthContext);
     const {isLoading, error, sendRequest, clearError} = useHttp();
     const [newPost, setNewPost] = useState(false);
+
+    const [loadedEvents, setLoadedEvents] = useState();
 
     const [formState, inputHandler] = useForm(
         {
@@ -73,6 +76,17 @@ const Events = props => {
       };
 
     }
+
+    useEffect(() => {
+      const getEvents = async() => {
+          try {
+              const responseData = await sendRequest('http://localhost:5002/api/events');
+              setLoadedEvents(responseData.events);
+          } catch(err) {
+          }
+      }
+      getEvents();
+  }, [sendRequest]);
 
     return (
       <React.Fragment>
@@ -145,6 +159,7 @@ const Events = props => {
 
         <SubMainNavigation />
         <Button onClick={openNewPostHandler}>New Event</Button>
+        <EventsList events={loadedEvents}/>
       </React.Fragment>
     );
 }
