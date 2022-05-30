@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import SubMainNavigation from '../../shared/components/Navigation/SubMainNavigation';
 import UserList from '../components/UserList';
@@ -9,9 +10,12 @@ import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import { useHttp } from '../../shared/hooks/http-hook';
 
 
+
 const Users = () => {
     const [loadedUsers, setLoadedUsers] = useState();
     const {isLoading, error, sendRequest, clearError} = useHttp();
+    //const userId = useParams().userId;
+    //console.log(userId)
 
     useEffect(() => {
         const getUsers = async() => {
@@ -23,6 +27,18 @@ const Users = () => {
         }
         getUsers();
     }, [sendRequest]);
+
+    // useEffect(() => {
+    //     const fetchUser = async() => {
+    //         try {
+    //             const responseData = await sendRequest(`http://localhost:5002/api/users/${userId}`);
+    //             setLoadedUsers(responseData.user)
+    //         } catch(err) {
+
+    //         }
+    //     }
+    //     fetchUser();
+    // }, [sendRequest, userId]);
 
     return (
         <>

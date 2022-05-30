@@ -59,7 +59,10 @@ const createPost = async (req, res, next) => {
     const errors = validationResult(req);
 
     if(!errors.isEmpty()){
-        throw new HttpError('Invalid inputs', 422);
+        const error = new HttpError(
+            'Invalid inputs', 
+            422);
+        return next(error);
     }
 
     const { title, description, creator } = req.body;
@@ -95,7 +98,6 @@ const createPost = async (req, res, next) => {
         await user.save({ session: session });
         await session.commitTransaction();
     } catch(err) {
-        console.log(err)
         const error = new HttpError(
             'Could not save the post. Try again',
             500

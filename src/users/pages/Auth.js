@@ -28,7 +28,7 @@ const Auth = () => {
     const authHandler = async event => {
         event.preventDefault();
         try {
-            await sendRequest('http://localhost:5002/api/users/login', 
+            const responseData = await sendRequest('http://localhost:5002/api/users/login', 
                 'POST',
                 JSON.stringify({
                         email: formState.inputs.email.value,
@@ -37,7 +37,7 @@ const Auth = () => {
                 {
                     'Content-Type': 'application/json'
                 });
-            auth.login();
+            auth.login(responseData.user.id);
         } catch(err) {
             
         }
