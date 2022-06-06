@@ -35,6 +35,7 @@
   .button--danger {
     background: #830000;
     border-color: #830000;
+    margin: 0;
   }
   
   .button--danger:hover,
@@ -58,4 +59,15 @@
   
   .button--big {
     font-size: 1.5rem;
+  }
+
+  .button--green {
+    background: lightgreen;
+    border-color: lightgreen;
+    margin: 0;
+  }
+
+  .button--green:hover {
+    background-color: green;
+    border-color: green;
   }

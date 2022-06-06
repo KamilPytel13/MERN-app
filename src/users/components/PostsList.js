@@ -13,7 +13,6 @@ const PostsList = props => {
     // }
 
     return (
-        //<h2>hello</h2>
         <ul className="users-list">
             {props.posts?.map(post => {
                 return <PostItem 
@@ -21,6 +20,7 @@ const PostsList = props => {
                 id={post.id}
                 title={post.title}
                 description={post.description}
+                onDelete={props.onDeletePost}
                 />
             })}
         </ul>

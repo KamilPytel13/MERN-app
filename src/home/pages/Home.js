@@ -81,6 +81,10 @@ const Home = props => {
     //   );
     // }
 
+    const postDeletedHandler = (deletedPostId) => {
+      setLoadedPosts(prevPosts => prevPosts.filter(post => post.id !== deletedPostId))
+    }
+
     return (
       <React.Fragment>
         <ErrorModal error={error} onClear={clearError} />
@@ -131,8 +135,7 @@ const Home = props => {
 
         <SubMainNavigation />
         <Button onClick={openNewPostHandler}>New Post</Button>
-        {/* {postItem()} */}
-        <PostsList posts={loadedPosts}/>
+        <PostsList posts={loadedPosts} onDeletePost={postDeletedHandler}/>
       </React.Fragment>
     );
 }

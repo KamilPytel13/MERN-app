@@ -9,7 +9,7 @@
   }
 
 .post-content {
-    padding: 0;
+    padding: 0 1rem 0 1rem;
     display: flex;
     flex-direction: column;
 }
@@ -17,4 +17,9 @@
 .post-title {
     display: flex;
     justify-content: center;
+}
+
+.position-right {
+    display: flex;
+    flex-direction: row-reverse;
 }
