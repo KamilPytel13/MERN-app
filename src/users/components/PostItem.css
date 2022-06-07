@@ -23,3 +23,13 @@
     display: flex;
     flex-direction: row-reverse;
 }
+
+.post-bottom {
+    display: flex;
+    justify-content: space-between;
+}
+
+.counter__output {
+    font-size: 40px;
+    color: rgb(116, 7, 7);
+}

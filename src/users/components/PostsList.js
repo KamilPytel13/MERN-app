@@ -19,6 +19,7 @@ const PostsList = props => {
                 key={post.id}
                 id={post.id}
                 title={post.title}
+                creatorId={post.creator}
                 description={post.description}
                 onDelete={props.onDeletePost}
                 />
