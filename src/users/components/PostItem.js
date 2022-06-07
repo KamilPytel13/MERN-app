@@ -20,8 +20,8 @@ const PostItem = props => {
     const [loadedPost, setLoadedPost] = useState();
     const [counter, setCounter] = useState(0)
     const auth = useContext(AuthContext);
-    const postId = useParams().postId;
-    //const navigate = useNavigate();
+    //const postId = useParams().postId;
+    const navigate = useNavigate();
 
     const [formState, inputHandler, setFormData] = useForm({
         title: {
@@ -77,7 +77,7 @@ const PostItem = props => {
         event.preventDefault();
         try {
             await sendRequest(
-                `http://localhost:5002/api/home/${postId}`,
+                `http://localhost:5002/api/home/${props.id}`,
                 "PATCH",
                 JSON.stringify({
                   title: formState.inputs.title.value,
@@ -87,14 +87,14 @@ const PostItem = props => {
                   "Content-Type": "application/json",
                 }
               );
-              //navigate('/')
+              navigate('/')
         } catch(err) {}
     }
 
     const editPostHandler = () => {
             const fetchPost = async () => {
                 try {
-                    const responseData = await sendRequest(`http://localhost:5002/api/home/${postId}`);
+                    const responseData = await sendRequest(`http://localhost:5002/api/home/${props.id}`);
                     setLoadedPost(responseData.post);
                     setFormData({
                         title: {
