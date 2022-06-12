@@ -1,5 +1,5 @@
 import React, {useState, useContext} from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Card from "../../shared/components/UIElements/Card";
 import Button from "../../shared/components/FormElements/Button";
 import Input from "../../shared/components/FormElements/Input";
@@ -10,7 +10,6 @@ import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import { useForm } from "../../shared/hooks/form-hook";
 import { AuthContext } from "../../shared/context/authContext";
-//import './UserItem.css';
 import './PostItem.css';
 
 const PostItem = props => {
@@ -20,7 +19,6 @@ const PostItem = props => {
     const [loadedPost, setLoadedPost] = useState();
     const [counter, setCounter] = useState(0)
     const auth = useContext(AuthContext);
-    //const postId = useParams().postId;
     const navigate = useNavigate();
 
     const [formState, inputHandler, setFormData] = useForm({
@@ -34,16 +32,6 @@ const PostItem = props => {
         }
     }, false);
 
-    // return (
-    //     <li className='user-item'>
-    //         <Card className='user-item__content'>
-    //             <div className='user-item__info'>
-    //                 <h2>Title: {props.title}</h2>
-    //                 <h2>Description: {props.description}</h2>
-    //             </div>
-    //         </Card>
-    //     </li>
-    // );
     const increaseCounter = () => {
         setCounter(count => count + 1);
     }
