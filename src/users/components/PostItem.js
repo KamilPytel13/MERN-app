@@ -187,23 +187,24 @@ const PostItem = props => {
                 {/* <Card className='user-item__content'> */}
                 <Card post>
                     {isLoading && <LoadingSpinner asOverlay />}
-                    <div className="position-right">
-                    {auth.userId === props.creatorId && 
-                        <Button danger onClick={showDeleteWarningHandler}>x</Button>
-                    }
-                    </div>
-                    <div className="post-content">
-                        <h1 className="post-title">T: {props.title}</h1>
-                        <h2>D: {props.description}</h2>
-                    </div>
-                    <div className="post-bottom">
-                        {auth.userId === props.creatorId && 
-                        //  <Button inverse onClick={showEditPostHandler}>Edit</Button>
+                    <div className="post-top">
+                        {/* check if user is signed in to display edit and x button */}
+                         {auth.userId === props.creatorId && 
                             <Button inverse onClick={() => {
                                 showEditPostHandler();
                                 editPostHandler();
                             }}>Edit</Button>
                         }
+                        {auth.userId === props.creatorId && 
+                            <Button danger onClick={showDeleteWarningHandler}>x</Button>
+                        }
+                    </div>
+                    <div className="post-content">
+                        <h1 className="post-title">T: {props.title}</h1>
+                        <h2>D: {props.description}</h2>
+                    </div>
+                    <div className="position-right">
+                        {/* <p>Created by: {props.creatorId}</p> */}
                         <Button green onClick={increaseCounter}>Like</Button>
                         <span className="counter__output">{counter}</span>
                     </div>  

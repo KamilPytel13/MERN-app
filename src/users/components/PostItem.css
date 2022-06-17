@@ -24,7 +24,7 @@
     flex-direction: row-reverse;
 }
 
-.post-bottom {
+.post-top {
     display: flex;
     justify-content: space-between;
 }
