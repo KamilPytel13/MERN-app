@@ -5,7 +5,7 @@ const eventSchema = new Schema({
     title: { type: String, required: true},
     description: { type: String, required: true },
     place: { type: String, required: true },
-    eventDate: { type: Date, required: true },
+    eventDate: { type: String, required: true },
     eventTime: { type: String, required: true },
     creator: { type: mongoose.Types.ObjectId, required: true, ref: 'User' }
 }, {

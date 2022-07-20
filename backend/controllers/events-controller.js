@@ -65,7 +65,7 @@ const createEvent = async(req, res, next) => {
     }
 
     const { title, description, eventDate, eventTime, place, creator} = req.body;
-    //eventTime 
+
     const createdEvent = new Event({
         title,
         description,
