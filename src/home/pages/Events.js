@@ -69,7 +69,9 @@ const Events = props => {
            place: formState.inputs.place.value,
            creator: auth.userId
         }),
-          { 'Content-Type': 'application/json'}
+          { 'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + auth.token
+          }
         );
         navigate('/');
       } catch(err) {

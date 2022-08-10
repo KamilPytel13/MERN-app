@@ -3,10 +3,13 @@ const { check } = require('express-validator');
 
 const router = express.Router();
 const eventsController = require('../controllers/events-controller');
+const checkAuth = require('../middleware/auth');
 
 router.get('/:eid', eventsController.getEventById);
 
 router.get('/', eventsController.getAllEvents);
+
+router.use(checkAuth);
 
 router.post('/', 
     [

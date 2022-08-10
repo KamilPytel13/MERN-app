@@ -1,4 +1,6 @@
 const { validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const HttpError = require('../models/http-errors');
 const User = require('../models/user');
 
@@ -73,11 +75,20 @@ const registerUser = async (req, res, next) => {
         return next(error);
     }
 
+    let hashedPass;
+    try {
+        hashedPass = await bcrypt.hash(password, 12);
+    } catch (err) {
+        const error = new HttpError('Could not create user, please try again.', 500);
+        return next(error);
+    }
+    
+
     const createdUser = new User({
         name,
         surname,
         email,
-        password,
+        password: hashedPass,
         apartment,
         posts: [],
         events: []
@@ -93,7 +104,24 @@ const registerUser = async (req, res, next) => {
         return next(error);
     }
 
-    res.status(201).json({ user: createdUser.toObject({ getters: true }) });
+    let token;
+    try{
+        token = jwt.sign(
+            { userId: createdUser.id, email: createdUser.email },
+            "secretKey_notToBeShared",
+            { expiresIn: '1h'}
+          );
+    } catch(err) {
+        const error = new HttpError(
+            'Creating user failed. Please try again.',
+            500
+        );
+        return next(error);
+    }
+    
+
+    //res.status(201).json({ user: createdUser.toObject({ getters: true }) });
+    res.status(201).json({ userId: createdUser.id, email: createdUser.email, token: token });
 };
 
 const loginUser = async (req, res, next) => {
@@ -111,7 +139,7 @@ const loginUser = async (req, res, next) => {
         return next(error);
     }
 
-    if(!userExists || userExists.password !== password) {
+    if(!userExists) {
         const error = new HttpError(
             'Wrong username or password. Try again.',
             401
@@ -119,7 +147,41 @@ const loginUser = async (req, res, next) => {
         return next(error);
     }
 
-    res.json({ message: 'Logged in', user: userExists.toObject({ getters: true })});
+    let isPassValid = false;
+    try {
+        isPassValid = await bcrypt.compare(password, userExists.password)
+    } catch(err) {
+        const error = new HttpError('Wrong password, try again.', 500);
+        return next(error);
+    }
+
+    if(!isPassValid) {
+        const error = new HttpError(
+            'Wrong username or password. Try again.',
+            401
+        );
+        return next(error);
+    }
+
+    let token;
+    try{
+        token = jwt.sign(
+            { userId: userExists.id, email: userExists.email },
+            "secretKey_notToBeShared",
+            { expiresIn: '1h'}
+          );
+    } catch(err) {
+        const error = new HttpError(
+            'Logging in user failed. Please try again.',
+            500
+        );
+        return next(error);
+    }
+    
+
+    //res.json({ message: 'Logged in', user: userExists.toObject({ getters: true })});
+    res.json({ userId: userExists.id, email: userExists.email, token: token});
+
 };
 
 exports.getUserById = getUserById;

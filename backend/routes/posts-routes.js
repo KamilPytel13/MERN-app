@@ -3,10 +3,14 @@ const { check } = require('express-validator');
 
 const router = express.Router();
 const postsController = require('../controllers/posts-controller');
+const checkAuth = require('../middleware/auth');
 
 router.get('/:pid', postsController.getPostById);
 
 router.get('/', postsController.getAllPosts);
+
+//middleware to protect the following routes
+router.use(checkAuth);
 
 router.post('/', 
     [

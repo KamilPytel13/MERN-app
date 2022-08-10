@@ -32,7 +32,7 @@ const PostItem = props => {
         }
     }, false);
 
-    const increaseCounter = () => {
+    const increaseCounter = async () => {
         setCounter(count => count + 1);
     }
 
@@ -47,7 +47,14 @@ const PostItem = props => {
     const confirmDeleteHandler = async () => {
         setShowConfirmModal(false);
         try {
-            await sendRequest(`http://localhost:5002/api/home/${props.id}`, 'DELETE');
+            await sendRequest(
+              `http://localhost:5002/api/home/${props.id}`,
+              "DELETE",
+              null,
+              {
+                "Authorization": "Bearer " + auth.token
+              }
+            );
             props.onDelete(props.id);
         } catch(err) {
         }
@@ -73,6 +80,7 @@ const PostItem = props => {
                 }),
                 {
                   "Content-Type": "application/json",
+                  "Authorization": "Bearer " + auth.token
                 }
               );
               navigate('/')

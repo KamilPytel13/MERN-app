@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { post } = require('../routes/events-routes');
 const Schema = mongoose.Schema;
 
 const eventSchema = new Schema({
