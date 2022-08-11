@@ -123,6 +123,15 @@ const editPost = async (req, res, next) => {
         );
         return next(error);
     }
+    
+    //backend authorization protection
+    if (post.creator.toString() !== req.userData.userId) {
+        const error = new HttpError(
+            'You are not allowed to perform this operation.',
+            401
+        );
+        return next(error);
+    }
 
     post.title = title;
     post.description = description;
@@ -159,6 +168,15 @@ const deletePost = async (req, res, next) => {
         const error = new HttpError(
             'There is no post to delete with a given Id', 
             404
+        );
+        return next(error);
+    }
+
+    //backend auth check to allow deleting places
+    if (post.creator.id !== req.userData.userId) {
+        const error = new HttpError(
+            'You are not allowed to perform this operation.',
+            401
         );
         return next(error);
     }

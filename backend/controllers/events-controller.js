@@ -134,6 +134,15 @@ const editEvent = async (req, res, next) => {
         return next(error);
     }
 
+    //backend check to allow editing the event
+    if (event.creator.toString() !== req.userData.userId) {
+        const error = new HttpError(
+            'You are not allowed to perform this operation.',
+            401
+        );
+        return next(error);
+    }
+
     event.title = title;
     event.description = description;
     event.place = place;
@@ -170,6 +179,15 @@ const deleteEvent = async (req, res, next) => {
         const error = new HttpError(
             'There is no event to delete with a given Id', 
             404
+        );
+        return next(error);
+    }
+
+    //backend check to allow deteing the place
+    if (event.creator.id !== req.userData.userId) {
+        const error = new HttpError(
+            'You are not allowed to perform this operation.',
+            401
         );
         return next(error);
     }
