@@ -19,6 +19,11 @@ function App() {
   const login = useCallback((uid, token) => {
     setToken(token);
     setUserId(uid);
+    //allow reloading the page by setting the token in local storage
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({ userId: uid, token: token })
+    );
   }, [])
 
   const logout = useCallback(() => {
