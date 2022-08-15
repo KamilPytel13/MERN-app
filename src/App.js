@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Navigate } from 'react-router-dom'
 
@@ -12,24 +12,56 @@ import Auth from './users/pages/Auth';
 import Register from './users/pages/Register';
 import { AuthContext } from './shared/context/authContext';
 
+let timer;
+
 function App() {
   const [token, setToken] = useState(false);
+  const [tokenExpirationDate, setTokenExpirationDate] = useState();
   const [userId, setUserId] = useState(false);
 
-  const login = useCallback((uid, token) => {
+  const login = useCallback((uid, token, expirationDate) => {
     setToken(token);
     setUserId(uid);
+    const tokenExpiration = expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
+    setTokenExpirationDate(tokenExpiration);
     //allow reloading the page by setting the token in local storage
     localStorage.setItem(
       "userData",
-      JSON.stringify({ userId: uid, token: token })
+      JSON.stringify({
+        userId: uid,
+        token: token,
+        expiration: tokenExpiration.toISOString(),
+      })
     );
   }, [])
 
   const logout = useCallback(() => {
     setToken(null);
     setUserId(null);
+    setTokenExpirationDate(null);
+    localStorage.removeItem('userData');
   }, [])
+
+  useEffect(() => {
+    if (token && tokenExpirationDate) {
+      const remainingTime = tokenExpirationDate.getTime() - new Date().getTime();
+      timer = setTimeout(logout, remainingTime);
+    } else {
+      clearTimeout(timer);
+    }
+  }, [token, logout, tokenExpirationDate]);
+
+    //component only runs once when mounted - after all elements are rendered
+  useEffect(() => {
+      const localData = JSON.parse(localStorage.getItem('userData'));
+      if (
+        localData &&
+        localData.token &&
+        new Date(localData.expiration > new Date())
+      ) {
+        login(localData.userId, localData.token, new Date(localData.expiration));
+      }
+    }, [login]);
 
   let routes;
 
