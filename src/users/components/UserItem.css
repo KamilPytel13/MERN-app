@@ -21,7 +21,10 @@
   }
   
   .user-item__content {
-    padding: 0;
+    padding: 10;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
   }
   
   .user-item__image {
@@ -34,7 +37,7 @@
     font-size: 1.5rem;
     margin: 0 0 0.5rem 0;
     font-weight: normal;
-    color: #ffd900;
+    color: black;
   }
   
   .user-item:hover h2,
@@ -47,3 +50,13 @@
   .user-item__info h3 {
     margin: 0;
   }
+
+  .grey {
+    background-color: lightgray;
+  }
+
+ #title {
+  color: red;
+  display: flex;
+  justify-content: center;
+ }
