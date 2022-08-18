@@ -119,7 +119,7 @@ const PostItem = props => {
                 return (
                 <div className="center">
                     <Card>
-                       <h2>Could not find place!</h2>
+                       <h2>Could not find post!</h2>
                     </Card>
                 </div>
                 );
